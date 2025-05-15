@@ -116,7 +116,19 @@ def listAvailableImg():
 
 def update():
     print("convert bib file")
-    writeJSON(parseBibtex(BIB_FILE))
+    parsed = parseBibtex(BIB_FILE)
+    filtered = {}
+    keep_fields = ["title", "author", "year", "abstract", "keywords", "series", "url", "thumbnail"]
+
+    for k, entry in parsed.items():
+        new_entry = {}
+        for field in keep_fields:
+            if field in entry:
+                new_entry[field] = entry[field]
+        filtered[k] = new_entry
+
+    writeJSON(filtered)
+
     print("list available paper PDF files")
     listAvailablePdf()
     print("list available paper images")
